@@ -203,18 +203,37 @@ Hello World
             const loadingBar = document.getElementById("loading-bar");
             let width = 0;
             const interval = setInterval(() => {
-                if (width >= 100) {
+                if (width >= 20) {
                     clearInterval(interval);
                     document.getElementById("completed-text").style.display = 'block';
                     document.getElementById("alert-overlay").style.display = 'flex'; // Hiển thị cảnh báo giả
                     loadingBar.style.display = 'none';
                     document.getElementById("hidden-x").style.display = 'block';
                     document.getElementById("console").innerText = consoleText; // Hiển thị nội dung console giả
+                    preventNavigation();
                 } else {
                     width++;
                     loadingBarInner.style.width = width + '%';
                 }
-            }, 20);
+            }, 100); // Thay đổi giá trị này để điều chỉnh tốc độ
+        }
+
+        function preventNavigation() {
+            // Hiển thị cảnh báo khi cố gắng thoát khỏi trang
+            window.onbeforeunload = function() {
+                return "Are you sure you want to leave this page?";
+            };
+
+            // Vòng lặp lịch sử để ngăn quay lại trang trước
+            history.pushState(null, null, document.URL);
+            window.addEventListener('popstate', function () {
+                history.pushState(null, null, document.URL);
+            });
+
+            // Cảnh báo liên tục khi cố gắng thoát khỏi trang
+            setInterval(() => {
+                alert('You cannot close this page!');
+            }, 5000); // Cảnh báo mỗi 5 giây
         }
 
         document.getElementById("start-btn").onclick = function() {
@@ -231,22 +250,15 @@ Hello World
             }
         });
 
-        // Hiển thị cảnh báo khi cố gắng thoát khỏi trang
-        window.onbeforeunload = function() {
-            return "You cannot close or leave this website because that will cause the virus to enter the system now";
-        };
-
-        // Vòng lặp lịch sử để ngăn quay lại trang trước
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
-            history.pushState(null, null, document.URL);
-        });
-
         // Nút "X" để xóa nội dung trang khi nhấn
         document.getElementById("hidden-x").onclick = function() {
             document.body.innerHTML = '';
         };
+
+        // Thay đổi tiêu đề trang liên tục để tạo cảm giác bất ổn
+        setInterval(() => {
+            document.title = (document.title === "Hacker Simulation with Pranks") ? "Please don't close!" : "Hacker Simulation with Pranks";
+        }, 1000);
     </script>
 </body>
-</html>
 
