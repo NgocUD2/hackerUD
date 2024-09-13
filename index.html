@@ -46,6 +46,7 @@ Hello World
             color: black;
             cursor: pointer;
             z-index: 2;
+            display: none; /* Ẩn nút X cho đến khi thanh loading xong */
         }
         #hidden-x:hover {
             color: red;
@@ -79,6 +80,38 @@ Hello World
             z-index: 2;
             text-align: center;
         }
+        #alert-overlay {
+            display: none; /* Ẩn lớp phủ cảnh báo giả */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+        }
+        #alert-overlay p {
+            margin: 20px;
+        }
+        #console {
+            width: 80%;
+            height: 200px;
+            background-color: #111;
+            border: 1px solid #444;
+            color: lightgray;
+            padding: 10px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            display: none; /* Ẩn console cho đến khi hack xong */
+            position: absolute;
+            bottom: 20px;
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
@@ -89,6 +122,10 @@ Hello World
     </div>
     <div id="hidden-x">X</div>
     <div id="completed-text">SUCCESSFULLY!!!</div>
+    <div id="alert-overlay">
+        <p>System Alert: Unauthorized access detected! Action required immediately.</p>
+    </div>
+    <div id="console"></div>
 
     <script>
         const hackerText = `Initializing...
@@ -124,6 +161,28 @@ Hello World
         ---------------
         Mission accomplished.`;
 
+        const consoleText = `Console:
+        > Initializing system...
+        > System libraries loaded
+        > Secured files accessed
+        > Firewall bypassed
+        > SQL Injection completed
+        > Malware injected
+        > Passwords extracted
+        > Connection to remote server established
+        > IP address traced: 192.168.0.1
+        > Port scan completed
+        > Vulnerabilities exploited
+        > Trojan virus uploaded
+        > Remote control protocol initiated
+        > System compromised. Root access granted!
+        > Sensitive data copied
+        > Confidential files downloaded
+        > All files encrypted
+        > Covering tracks...
+        > System shutdown initiated
+        > Mission accomplished`;
+
         let index = 0;
         const speed = 12;
 
@@ -134,6 +193,7 @@ Hello World
                 setTimeout(typeText, speed);
             } else {
                 document.getElementById("loading-bar").style.display = 'block';
+                document.getElementById("console").style.display = 'block'; // Hiển thị console
                 startLoading();
             }
         }
@@ -146,8 +206,10 @@ Hello World
                 if (width >= 100) {
                     clearInterval(interval);
                     document.getElementById("completed-text").style.display = 'block';
+                    document.getElementById("alert-overlay").style.display = 'flex'; // Hiển thị cảnh báo giả
                     loadingBar.style.display = 'none';
                     document.getElementById("hidden-x").style.display = 'block';
+                    document.getElementById("console").innerText = consoleText; // Hiển thị nội dung console giả
                 } else {
                     width++;
                     loadingBarInner.style.width = width + '%';
@@ -171,7 +233,7 @@ Hello World
 
         // Hiển thị cảnh báo khi cố gắng thoát khỏi trang
         window.onbeforeunload = function() {
-            return "You cannot close or leave this website because that will cause the virus to enter the system now?";
+            return "You cannot close or leave this website because that will cause the virus to enter the system now";
         };
 
         // Vòng lặp lịch sử để ngăn quay lại trang trước
