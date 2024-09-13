@@ -4,7 +4,7 @@ Hello World
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker Simulation with Loading and Completion Text</title>
+    <title>Hacker Simulation with Pranks</title>
     <style>
         body {
             background-color: black;
@@ -34,7 +34,6 @@ Hello World
             padding: 10px 20px;
             border: none;
             cursor: pointer;
-            z-index: 1;
         }
         button:hover {
             background-color: lightgreen;
@@ -68,11 +67,11 @@ Hello World
             background-color: limegreen;
         }
         #completed-text {
-            display: none; /* Ẩn chữ SUCCESSFULLY!!! cho đến khi thanh loading xong */
+            display: none;
             font-size: 48px;
-            color: black; /* Màu chữ */
-            background-color: limegreen; /* Màu nền của khung */
-            border: 5px solid black; /* Viền khung */
+            color: black;
+            background-color: limegreen;
+            border: 5px solid black;
             padding: 20px;
             position: absolute;
             top: 50%;
@@ -83,13 +82,13 @@ Hello World
     </style>
 </head>
 <body>
-    <button id="start-btn">Bắt đầu hack</button>
+    <button id="start-btn">Truy Cập Mã QR</button>
     <div id="hacker-text"></div>
     <div id="loading-bar">
         <div id="loading-bar-inner"></div>
-    </div> <!-- Thanh loading -->
-    <div id="hidden-x">X</div> <!-- Nút tàng hình ở góc phải -->
-    <div id="completed-text">SUCCESSFULLY!!!</div> <!-- Chữ hoàn thành -->
+    </div>
+    <div id="hidden-x">X</div>
+    <div id="completed-text">SUCCESSFULLY!!!</div>
 
     <script>
         const hackerText = `Initializing...
@@ -126,7 +125,7 @@ Hello World
         Mission accomplished.`;
 
         let index = 0;
-        const speed = 5;
+        const speed = 12;
 
         function typeText() {
             if (index < hackerText.length) {
@@ -134,13 +133,11 @@ Hello World
                 index++;
                 setTimeout(typeText, speed);
             } else {
-                // Khi text chạy xong, hiển thị thanh loading
                 document.getElementById("loading-bar").style.display = 'block';
-                startLoading(); // Bắt đầu chạy thanh loading
+                startLoading();
             }
         }
 
-        // Hàm bắt đầu chạy thanh loading
         function startLoading() {
             const loadingBarInner = document.getElementById("loading-bar-inner");
             const loadingBar = document.getElementById("loading-bar");
@@ -148,14 +145,14 @@ Hello World
             const interval = setInterval(() => {
                 if (width >= 100) {
                     clearInterval(interval);
-                    document.getElementById("completed-text").style.display = 'block'; // Hiển thị chữ "SUCCESSFULLY!!!"
-                    loadingBar.style.display = 'none'; // Ẩn thanh loading
-                    document.getElementById("hidden-x").style.display = 'block'; // Hiển thị nút "X"
+                    document.getElementById("completed-text").style.display = 'block';
+                    loadingBar.style.display = 'none';
+                    document.getElementById("hidden-x").style.display = 'block';
                 } else {
                     width++;
-                    loadingBarInner.style.width = width + '%'; // Cập nhật chiều rộng của thanh loading
+                    loadingBarInner.style.width = width + '%';
                 }
-            }, 100); // Tăng chiều rộng mỗi 100ms (tổng cộng 10 giây để đạt 100%)
+            }, 100);
         }
 
         document.getElementById("start-btn").onclick = function() {
@@ -164,9 +161,30 @@ Hello World
             typeText();
         };
 
+        // Chặn các phím chức năng như Alt + F4 và Ctrl + W
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key === 'w' || event.altKey && event.key === 'F4' || event.key === 'F5') {
+                event.preventDefault();
+                alert('You cannot close this!');
+            }
+        });
+
+        // Hiển thị cảnh báo khi cố gắng thoát khỏi trang
+        window.onbeforeunload = function() {
+            return "Are you sure you want to leave this page?";
+        };
+
+        // Vòng lặp lịch sử để ngăn quay lại trang trước
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
+
+        // Nút "X" để xóa nội dung trang khi nhấn
         document.getElementById("hidden-x").onclick = function() {
-            document.body.innerHTML = ''; // Khi nhấn vào dấu "X", trang sẽ bị xóa trắng để "tắt hack"
+            document.body.innerHTML = '';
         };
     </script>
 </body>
 </html>
+
